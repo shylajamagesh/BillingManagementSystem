@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Contacts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f7f9fc;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        input[type="text"], input[type="file"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        td a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contacts</h1>
+
+    <!-- Search form -->
+    <form action="/contacts/search/results" method="get">
+        <input type="text" name="name" placeholder="Search by name">
+        <input type="text" name="category" placeholder="Search by category">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- CSV import form -->
+    <form action="/contacts/import" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Import Contacts from CSV</button>
+    </form>
+
+    <!-- CSV export button -->
+    <form action="/contacts/export" method="get">
+        <button type="submit">Export Contacts to CSV</button>
+    </form>
+
+    <!-- Table of contacts -->
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="contact : ${contacts}">
+                <td th:text="${contact.name}"></td>
+                <td th:text="${contact.phone}"></td>
+                <td th:text="${contact.email}"></td>
+                <td th:text="${contact.category}"></td>
+                <td>
+                    <a th:href="@{/contacts/edit/{id}(id=${contact.id})}">Edit</a> |
+                    <a th:href="@{/contacts/delete/{id}(id=${contact.id})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
